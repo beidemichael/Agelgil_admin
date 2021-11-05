@@ -132,36 +132,35 @@ class Orders {
 
   bool isPaid;
 
-  Orders({
-    this.food,
-    this.price,
-    this.quantity,
-    this.loungeName,
-    this.created,
-    this.isTaken,
-    this.orderCode,
-    this.userName,
-    this.userPhone,
-    this.carrierName,
-    this.carrierUserUid,
-    this.carrierphone,
-    this.documentId,
-    this.loungeOrderNumber,
-    this.serviceCharge,
-    this.deliveryFee,
-    this.subTotal,
-    this.tip,
-    this.information,
-    this.delivered,
-    this.distance,
-    this.isPaid,
-    this.latitude,
-    this.longitude,
-    this.loungeId,
-    this.loungeLatitude,
-    this.loungeLongitude,
-    this.userToken
-  });
+  Orders(
+      {this.food,
+      this.price,
+      this.quantity,
+      this.loungeName,
+      this.created,
+      this.isTaken,
+      this.orderCode,
+      this.userName,
+      this.userPhone,
+      this.carrierName,
+      this.carrierUserUid,
+      this.carrierphone,
+      this.documentId,
+      this.loungeOrderNumber,
+      this.serviceCharge,
+      this.deliveryFee,
+      this.subTotal,
+      this.tip,
+      this.information,
+      this.delivered,
+      this.distance,
+      this.isPaid,
+      this.latitude,
+      this.longitude,
+      this.loungeId,
+      this.loungeLatitude,
+      this.loungeLongitude,
+      this.userToken});
 }
 
 class Cart3Items {
@@ -216,6 +215,7 @@ class Carriers {
   String carrierUid;
   String loungeUid;
   String documentUid;
+  var lastPaid;
 
   Carriers(
       {this.carrierName,
@@ -223,5 +223,7 @@ class Carriers {
       this.carrierUid,
       this.loungeUid,
       this.verified,
-      this.documentUid});
+      this.documentUid,
+      this.lastPaid,
+      });
 }

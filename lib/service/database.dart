@@ -265,6 +265,12 @@ class DatabaseService {
       'verified': false,
     });
   }
+  Future carrierPaid() async {
+    carrierUsersCollection.doc(id).update({
+      'lastPaid': Timestamp.now(),
+    });
+  }
+  
    Future unauthorizeCarrier() async {
     carrierUsersCollection.doc(id).update({
       'taker': false,
@@ -335,6 +341,7 @@ class DatabaseService {
         carrierName: doc.data()['name'] ?? '',
         carrierUid: doc.data()['userUid'] ?? '',
         carrierPhone: doc.data()['phoneNumber'] ?? '',
+        lastPaid: doc.data()['lastPaid'] ?? Timestamp.now(),
         documentUid: doc.reference.id ?? '',
       );
     }).toList();
