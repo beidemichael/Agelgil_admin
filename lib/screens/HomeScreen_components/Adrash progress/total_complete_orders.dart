@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:agelgil_admin_end/screens/HomeScreen_components/Adrash%20progress/total_complete_orders.dart';
 import 'package:agelgil_admin_end/service/database.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +10,13 @@ import '../../../shared/background_blur.dart';
 import '../../../shared/internet_connection.dart';
 import 'complete_my_orders_card.dart';
 
-class AdrashCompleteOrders extends StatefulWidget {
-  String carrierUid;
-  AdrashCompleteOrders({this.carrierUid});
+class TotalAdrashCompleteOrders extends StatefulWidget {
+ 
   @override
-  _AdrashCompleteOrdersState createState() => _AdrashCompleteOrdersState();
+  _TotalAdrashCompleteOrdersState createState() => _TotalAdrashCompleteOrdersState();
 }
 
-class _AdrashCompleteOrdersState extends State<AdrashCompleteOrders> {
+class _TotalAdrashCompleteOrdersState extends State<TotalAdrashCompleteOrders> {
   StreamSubscription subscription;
   bool isInternetConnected = true;
   double total;
@@ -209,10 +207,10 @@ class _AdrashCompleteOrdersState extends State<AdrashCompleteOrders> {
                         const EdgeInsets.only(top: 18.0, left: 10, right: 10),
                     child: Center(
                       child: Text(
-                        'Complete orders',
+                        ' Total Complete orders',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 22.0,
+                            fontSize: 20.0,
                             color: Colors.grey[600]
                             // fontWeight: FontWeight.w700,
                             // fontStyle: FontStyle.italic,
@@ -241,67 +239,7 @@ class _AdrashCompleteOrdersState extends State<AdrashCompleteOrders> {
               ),
             ],
           ),
-          Positioned(
-            top: 5,
-            right: 5,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => MultiProvider(
-                        providers: [
-                          StreamProvider<List<Orders>>.value(
-                            value: DatabaseService(userUid: widget.carrierUid)
-                                .adrashProgress,
-                          ),
-                        ],
-                        child: TotalAdrashCompleteOrders(),
-                      ),
-                    ));
-              },
-              child: Container(
-                height: 80,
-                width: 50,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Total',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                          fontSize: 15.0,
-                          color: Colors.grey[800]
-                          // fontWeight: FontWeight.w700,
-                          // fontStyle: FontStyle.italic,
-                          ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    )
-                  ],
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20.0),
-                      bottomRight: Radius.circular(20.0)),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey[400],
-                      blurRadius: 5.0, //effect of softening the shadow
-                      spreadRadius: 0.5, //effecet of extending the shadow
-                      offset: Offset(
-                          8.0, //horizontal
-                          10.0 //vertical
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+        
           Positioned(
             bottom: 0,
             right: 0,

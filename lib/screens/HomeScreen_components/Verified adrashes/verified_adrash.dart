@@ -78,16 +78,28 @@ class _VerifiedAdrashState extends State<VerifiedAdrash> {
                                             MaterialPageRoute(
                                               builder: (_) => MultiProvider(
                                                 providers: [
+                                                  // StreamProvider<
+                                                  //     List<Orders>>.value(
+                                                  //   value: DatabaseService(
+                                                  //           userUid:
+                                                  //               adrashes[index]
+                                                  //                   .carrierUid)
+                                                  //       .adrashProgress,
+                                                  // ),
                                                   StreamProvider<
                                                       List<Orders>>.value(
                                                     value: DatabaseService(
                                                             userUid:
                                                                 adrashes[index]
-                                                                    .carrierUid)
-                                                        .adrashProgress,
+                                                                    .carrierUid,
+                                                            carrierLastPaid:
+                                                                adrashes[index]
+                                                                    .lastPaid)
+                                                        .adrashFromLastPaidProgress,
                                                   ),
                                                 ],
-                                                child: AdrashCompleteOrders(),
+                                                child: AdrashCompleteOrders(carrierUid: adrashes[index]
+                                                                    .carrierUid,),
                                               ),
                                             ));
                                       },
@@ -343,7 +355,7 @@ class _VerifiedAdrashState extends State<VerifiedAdrash> {
     int difference = timestamp;
     String result;
 
-    if (difference < 20000) {
+    if (difference < 58000) {
       result = "Not Active";
     } else if (difference < 60000) {
       result = countSeconds(difference);

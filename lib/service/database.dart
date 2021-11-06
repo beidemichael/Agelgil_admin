@@ -10,14 +10,17 @@ class DatabaseService {
   String loungeId;
   String id;
   int index;
+  var carrierLastPaid;
 
-  DatabaseService(
-      {this.phoneNumber,
-      this.userPhoneNumber,
-      this.userUid,
-      this.loungeId,
-      this.id,
-      this.index});
+  DatabaseService({
+    this.phoneNumber,
+    this.userPhoneNumber,
+    this.userUid,
+    this.loungeId,
+    this.id,
+    this.index,
+    this.carrierLastPaid,
+  });
   List category = [];
 //collecton reference
   final CollectionReference loungesCollection =
@@ -242,7 +245,7 @@ class DatabaseService {
       'Body': body,
       'Type': type,
       'created': Timestamp.now(),
-      'UserToken':userToken,
+      'UserToken': userToken,
     });
   }
 
@@ -265,13 +268,14 @@ class DatabaseService {
       'verified': false,
     });
   }
+
   Future carrierPaid() async {
     carrierUsersCollection.doc(id).update({
       'lastPaid': Timestamp.now(),
     });
   }
-  
-   Future unauthorizeCarrier() async {
+
+  Future unauthorizeCarrier() async {
     carrierUsersCollection.doc(id).update({
       'taker': false,
     });
@@ -316,6 +320,19 @@ class DatabaseService {
         .where('isTaken', isEqualTo: true)
         // .where('isPaid', isEqualTo: false)
         .where('carrierUserUid', isEqualTo: userUid)
+        .orderBy('created', descending: true)
+        .snapshots()
+        .map(_ordersListFromSnapshot);
+  }
+
+  Stream<List<Orders>> get adrashFromLastPaidProgress {
+    return orderCollection
+        .where('isDelivered', isEqualTo: true)
+        .where('isTaken', isEqualTo: true)
+        // .where('isPaid', isEqualTo: false)
+        .where('carrierUserUid', isEqualTo: userUid)
+        .where('deliveryTime', isGreaterThan: carrierLastPaid)
+        .orderBy('deliveryTime', descending: true)
         .orderBy('created', descending: true)
         .snapshots()
         .map(_ordersListFromSnapshot);
@@ -545,6 +562,7 @@ class DatabaseService {
       'eatThere': eatThereAvailable,
     });
   }
+
   Future updateLoungeVerification(
     bool verification,
   ) async {
@@ -643,7 +661,8 @@ class DatabaseService {
         .snapshots()
         .map(_carrierOrdersListFromSnapshot);
   }
- List<Orders> _completeOrdersListFromSnapshot(QuerySnapshot snapshot) {
+
+  List<Orders> _completeOrdersListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Orders(
           food: doc.data()['food'] ?? '',
@@ -660,20 +679,21 @@ class DatabaseService {
           latitude: doc.data()['Latitude'].toDouble() ?? 0.0,
           longitude: doc.data()['Longitude'].toDouble() ?? 0.0,
           loungeLatitude:
-              doc.data()['LoungeLocation']['geopoint'].latitude.toDouble() ?? 0.0,
+              doc.data()['LoungeLocation']['geopoint'].latitude.toDouble() ??
+                  0.0,
           loungeLongitude:
-              doc.data()['LoungeLocation']['geopoint'].longitude.toDouble() ?? 0.0,
+              doc.data()['LoungeLocation']['geopoint'].longitude.toDouble() ??
+                  0.0,
           distance: doc.data()['distance'].toDouble() ?? 0.0,
           deliveryFee: doc.data()['deliveryFee'].toDouble() ?? 0.0,
           serviceCharge: doc.data()['serviceCharge'].toDouble() ?? 0.0,
           tip: doc.data()['tip'].toInt() ?? 0,
           subTotal: doc.data()['subTotal'].toDouble() ?? 0.0,
           loungeOrderNumber: doc.data()['loungeOrderNumber'] ?? '',
-          documentId: doc.reference.id ?? ''
-          
-          );
+          documentId: doc.reference.id ?? '');
     }).toList();
   }
+
 //orders list from a snapshot
   List<Orders> _ordersListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
