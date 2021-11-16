@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:marquee_widget/marquee_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:time_formatter/time_formatter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -355,9 +354,7 @@ class _VerifiedAdrashState extends State<VerifiedAdrash> {
     int difference = timestamp;
     String result;
 
-    if (difference < 58000) {
-      result = "Not Active";
-    } else if (difference < 60000) {
+    if (difference < 60000) {
       result = countSeconds(difference);
     } else if (difference < 3600000) {
       result = countMinutes(difference);

@@ -185,6 +185,7 @@ class DatabaseService {
   Stream<List<UserInfo>> get allUsers {
     return usersCollection
         .orderBy('created', descending: true)
+        .limit(200)
         .snapshots()
         .map(_userListFromSnapshot);
   }
@@ -284,6 +285,7 @@ class DatabaseService {
   Future verifyCarrier() async {
     carrierUsersCollection.doc(id).update({
       'verified': true,
+      'lastPaid': Timestamp.now(),
     });
   }
 
@@ -341,6 +343,7 @@ class DatabaseService {
   Stream<List<Carriers>> get verifiedAdrashed {
     return carrierUsersCollection
         .where('verified', isEqualTo: true)
+        .orderBy('lastPaid', descending: true)
         .snapshots()
         .map(_verifiedAdrashListFromSnapshot);
   }
@@ -753,6 +756,7 @@ class DatabaseService {
         .where('isTaken', isEqualTo: true)
         .where('isPaid', isEqualTo: false)
         .orderBy('created', descending: true)
+        .limit(200)
         .snapshots()
         .map(_ordersListFromSnapshot);
   }
